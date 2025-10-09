@@ -24,8 +24,28 @@ for specific_path in "${SPECIFIC_PATHS[@]}"; do
   fi
 done
 
+# Sort directories by last access time (most recent first)
+# Create temporary file to store directory names with their access times
+temp_file=$(mktemp)
+for dir in "${all_dirs[@]}"; do
+  # Get access time in seconds since epoch
+  atime=$(stat -f "%a" "$dir" 2>/dev/null || echo "0")
+  echo "$atime $dir" >> "$temp_file"
+done
+
+# Sort by access time (descending) and extract directory names
+sorted_dirs=()
+while IFS= read -r line; do
+  # Extract directory name (everything after the first space)
+  dir_name="${line#* }"
+  sorted_dirs+=("$dir_name")
+done < <(sort -nr "$temp_file")
+
+# Clean up temporary file
+rm "$temp_file"
+
 # Use fzf to select a directory
-selected_dir=$(printf '%s\n' "${all_dirs[@]}" | fzf --prompt="Select project: ")
+selected_dir=$(printf '%s\n' "${sorted_dirs[@]}" | fzf --prompt="Select project: ")
 
 # Exit if nothing was selected
 if [[ -z "$selected_dir" ]]; then
