@@ -53,6 +53,22 @@ SPECIFIC_PATHS=("$HOME/.dotfiles")
 - `SEARCH_PATHS`: Directories where the script will look for project folders (searches one level deep)
 - `SPECIFIC_PATHS`: Individual directories to include directly in the selection list
 
+## Zellij keybinfing
+With a Run action on Zellij, you can show the sessionizer in a floating window, with a shortcut, and quickly switch to another session.  
+
+This will replicate the popup you can see in the image in this README file:
+
+```
+bind "Super s" { Run "zellij-sessionizer" {
+    close_on_exit true
+    floating true
+    x "30%"
+    y "10%"
+    width "40%"
+    height "80%"
+}; SwitchToMode "locked"; }
+```
+
 ## Usage
 
 Simply run the script:
