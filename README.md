@@ -1,6 +1,8 @@
-# Zellij Sessionizer
+<img width="1907" height="1238" alt="image" src="https://github.com/user-attachments/assets/39f9d6bf-266d-4c8c-ab98-efa0898a9a3b" /># Zellij Sessionizer
 
 A fuzzy finder-powered project switcher for [Zellij](https://zellij.dev/) sessions. Quickly navigate and switch between your development projects using [fzf](https://github.com/junegunn/fzf) and automatically create or switch to Zellij sessions with the proper working directory.
+
+<img width="1907" height="1238" alt="image" src="https://github.com/user-attachments/assets/086d2fcc-2d0f-44fa-896f-9e704eaa49b8" />
 
 Inspired by ThePrimeagen's [tmux-sessionizer](https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer) but adapted for Zellij.
 
