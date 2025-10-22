@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
 
-SEARCH_PATHS=("$HOME/Projects" "$HOME/code")
-SPECIFIC_PATHS=("$HOME/.dotfiles" "$HOME/.dotfiles/.config/nvim")
+SEARCH_PATHS=(${ZELLIJ_SESSIONIZER_SEARCH_PATHS:-"$HOME/Projects $HOME/Code"})
+SPECIFIC_PATHS=(${ZELLIJ_SESSIONIZER_SPECIFIC_PATHS:-"$HOME/.dotfiles $HOME/.dotfiles/.config/nvim"})
+OS_TYPE="${ZELLIJ_SESSIONIZER_OS_TYPE:-"$(uname)"}"
+ZELLIJ_SWITCH_PLUGIN="${ZELLIJ_SESSIONIZER_SWITCH_PLUGIN:-"https://github.com/mostafaqanbaryan/zellij-switch/releases/download/0.2.1/zellij-switch.wasm"}"
+
+get_atime() {
+	local dir="$0"
+	if [[ "$OS_TYPE" == "Linux" ]]; then
+		stat -c "%X" "$dir" 2>/dev/null || echo "0"
+	else
+		stat -f "%a" "$dir" 2>/dev/null || echo "0"
+	fi
+}
 
 # Handle special arguments
 if [[ "$1" == "--generate-list" ]]; then
@@ -31,7 +42,7 @@ if [[ "$1" == "--generate-list" ]]; then
     local temp_file=$(mktemp)
     for dir in "${all_dirs[@]}"; do
       # Get access time in seconds since epoch
-      local atime=$(stat -f "%a" "$dir" 2>/dev/null || echo "0")
+      local atime=$(get_atime "$dir")
       echo "$atime $dir" >> "$temp_file"
     done
 
@@ -127,7 +138,7 @@ generate_display_list() {
   local temp_file=$(mktemp)
   for dir in "${all_dirs[@]}"; do
     # Get access time in seconds since epoch
-    local atime=$(stat -f "%a" "$dir" 2>/dev/null || echo "0")
+    local atime=$(get_atime "$dir")
     echo "$atime $dir" >> "$temp_file"
   done
 
@@ -219,7 +230,7 @@ chmod +x "$temp_script"
 # Use fzf with key bindings for session management
 selected_display=$(generate_display_list | fzf --ansi \
   --prompt="Select project: " \
-  --header="Enter: Select | Ctrl+D: Delete Sessio | Ctrl+K: Kill Session" \
+  --header="Enter: Select | Ctrl+D: Delete Session | Ctrl+K: Kill Session" \
   --bind="ctrl-d:execute($temp_script delete {})+reload($0 --generate-list)" \
   --bind="ctrl-k:execute($temp_script kill {})+reload($0 --generate-list)")
 
@@ -247,7 +258,7 @@ session_name=$(basename "$selected_dir")
 # Change to session
 if [[ -v "$ZELLIJ" ]]; then
   # if we are in a zellij session
-  zellij pipe --plugin https://github.com/mostafaqanbaryan/zellij-switch/releases/download/0.2.1/zellij-switch.wasm -- "--session $session_name --cwd $selected_dir"
+  zellij pipe --plugin "$ZELLIJ_SWITCH_PLUGIN" -- "--session $session_name --cwd $selected_dir"
 else
   # if we are not in a zellij session
   zellij attach "$session_name" --create
