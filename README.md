@@ -49,6 +49,31 @@ SEARCH_PATHS=("$HOME/Projects" "$HOME/code")
 SPECIFIC_PATHS=("$HOME/.dotfiles")
 ```
 
+Or use environment variables to override default project directories:
+
+```bash
+# Override default environment variables when launching zellij-sessionizer
+# Each variable can contain one or more paths, separated by spaces.
+
+# Directories to search for projects (searches one level deep)
+# Default: $HOME/Projects $HOME/Code
+ZELLIJ_SESSIONIZER_SEARCH_PATHS="$HOME/projects $HOME/notes" \
+
+# Specific directories to include
+# Default: $HOME/.dotfiles $HOME/.dotfiles/.config/nvim
+ZELLIJ_SESSIONIZER_SPECIFIC_PATHS="/etc/somedir /etc/otherdir" \
+
+# Operating system type (used for OS-specific behavior)
+# Default: $(uname), usually no need to specify this.
+ZELLIJ_SESSIONIZER_OS_TYPE_OS_TYPE="Linux" \
+
+# Path or URL to load zellij-switch plugin
+# Default: https://github.com/mostafaqanbaryan/zellij-switch/releases/download/0.2.1/zellij-switch.wasm
+ZELLIJ_SESSIONIZER_SWITCH_PLUGIN="file:/path/to/plugin" \
+
+zellij-sessionizer
+```
+
 ### Search Paths
 - `SEARCH_PATHS`: Directories where the script will look for project folders (searches one level deep)
 - `SPECIFIC_PATHS`: Individual directories to include directly in the selection list
