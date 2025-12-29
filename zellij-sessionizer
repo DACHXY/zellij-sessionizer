@@ -4,6 +4,7 @@ SEARCH_PATHS=(${ZELLIJ_SESSIONIZER_SEARCH_PATHS:-"$HOME/Projects $HOME/Code"})
 SPECIFIC_PATHS=(${ZELLIJ_SESSIONIZER_SPECIFIC_PATHS:-"$HOME/.dotfiles $HOME/.dotfiles/.config/nvim"})
 OS_TYPE="${ZELLIJ_SESSIONIZER_OS_TYPE:-"$(uname)"}"
 ZELLIJ_SWITCH_PLUGIN="${ZELLIJ_SESSIONIZER_SWITCH_PLUGIN:-"https://github.com/mostafaqanbaryan/zellij-switch/releases/download/0.2.1/zellij-switch.wasm"}"
+ZELLIJ_SWITCH_PLUGIN_EXTRA_COMMAND="$ZELLIJ_SESSIONIZER_SWITCH_PLUGIN_EXTRA_COMMAND"
 
 get_atime() {
 	local dir="$0"
@@ -258,7 +259,7 @@ session_name=$(basename "$selected_dir")
 # Change to session
 if [[ -v "$ZELLIJ" ]]; then
   # if we are in a zellij session
-  zellij pipe --plugin "$ZELLIJ_SWITCH_PLUGIN" -- "--session $session_name --cwd $selected_dir"
+  zellij pipe --plugin "$ZELLIJ_SWITCH_PLUGIN" -- "--session $session_name --cwd $selected_dir $ZELLIJ_SWITCH_PLUGIN_EXTRA_COMMAND"
 else
   # if we are not in a zellij session
   zellij attach "$session_name" --create
