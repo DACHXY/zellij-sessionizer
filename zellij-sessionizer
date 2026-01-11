@@ -262,5 +262,5 @@ if [[ -v "$ZELLIJ" ]]; then
   zellij pipe --plugin "$ZELLIJ_SWITCH_PLUGIN" -- "--session $session_name --cwd $selected_dir $ZELLIJ_SWITCH_PLUGIN_EXTRA_COMMAND"
 else
   # if we are not in a zellij session
-  zellij attach "$session_name" --create
+  cd "$selected_dir" && zellij attach "$session_name" --create
 fi
